@@ -1,0 +1,80 @@
+# Window configuration - No decorations/title bar
+[window]
+decorations = "None"  # Removes title bar and borders
+padding = { x = 10, y = 10 }
+
+# Optional: Set initial window size
+dimensions = { columns = 120, lines = 30 }
+
+[font]
+normal = { family = "JetBrainsMono Nerd FontMono", style = "Regular"}
+size=16
+
+# Optional: Window position (uncomment if you want specific positioning)
+# position = { x = 0, y = 0 }
+
+# Shell configuration
+[terminal.shell]
+program = "/bin/bash"  # Change to "/bin/bash" if using Bash
+args = ["--login"]
+
+# Keyboard bindings (optional custom shortcuts)
+[[keyboard.bindings]]
+key = "V"
+mods = "Control|Shift"
+action = "Paste"
+
+[[keyboard.bindings]]
+key = "C"
+mods = "Control|Shift"
+action = "Copy"
+
+[[keyboard.bindings]]
+key = "F11"
+action = "ToggleFullscreen"
+
+# Color scheme (optional - dark theme example)
+[colors.primary]
+background = "0x1e1e2e"
+foreground = "0xcdd6f4"
+
+# Normal colors
+[colors.normal]
+black = "0x45475a"
+red = "0xf38ba8"
+green = "0xa6e3a1"
+yellow = "0xf9e2af"
+blue = "0x89b4fa"
+magenta = "0xf5c2e7"
+cyan = "0x94e2d5"
+white = "0xbac2de"
+
+# Bright colors
+[colors.bright]
+black = "0x585b70"
+red = "0xf38ba8"
+green = "0xa6e3a1"
+yellow = "0xf9e2af"
+blue = "0x89b4fa"
+magenta = "0xf5c2e7"
+cyan = "0x94e2d5"
+white = "0xefeff1"
+
+# Cursor configuration
+[cursor]
+style = { shape = "Beam", blinking = "On" }  # Options: "Block", "Underline", "Beam"
+
+# Scrolling configuration
+[scrolling]
+history = 10000
+multiplier = 3
+
+# Mouse configuration
+[mouse]
+hide_when_typing = true
+
+# Optional: Selection configuration
+[selection]
+save_to_clipboard = false
+
+[terminal]
