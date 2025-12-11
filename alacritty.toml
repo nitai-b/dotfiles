@@ -1,7 +1,7 @@
 # Window configuration - No decorations/title bar
 [window]
 decorations = "None"  # Removes title bar and borders
-padding = { x = 10, y = 10 }
+padding = { x = 0, y = 0 }
 
 # Optional: Set initial window size
 dimensions = { columns = 120, lines = 30 }
