@@ -94,6 +94,8 @@ if [ "$INSTALL_COMPOSER" = "composer" ]; then
   if command -v composer &>/dev/null; then
     echo "Composer is already installed:"
     composer --version
+    echo "Updating Composer to latest version..."
+    sudo composer self-update
   else
     # Install Composer with hash verification
     echo "Installing Composer..."
@@ -104,6 +106,9 @@ if [ "$INSTALL_COMPOSER" = "composer" ]; then
     sudo mv composer.phar /usr/local/bin/composer
     php -r "unlink('composer-setup.php');"
     cd -
+
+    # Update to latest version
+    sudo composer self-update
 
     # Verify Composer installation
     composer --version
