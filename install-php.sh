@@ -8,6 +8,9 @@ fi
 PHP_VERSION=$1
 WEB_SERVER=${2:-"none"} # optional second argument
 
+sudo apt update
+sudo apt upgrade -y
+
 # Add Ondrej PPAs if not already present
 if ! grep -q "ondrej/php" /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null; then
   echo "Adding Ondrej PHP PPA..."
