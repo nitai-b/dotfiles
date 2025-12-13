@@ -57,6 +57,37 @@ if (($(echo "$PHP_VERSION < 7.0" | bc -l))); then
   sudo apt-get install -y "php${PHP_VERSION}-json"
 fi
 
+# Install Apache2 if specified
+if [ "$WEB_SERVER" = "apache2" ]; then
+  if command -v apache2 &>/dev/null; then
+    echo "Apache2 is already installed:"
+    apache2 --version
+  else
+    echo "Installing Apache2 and PHP module..."
+    sudo apt-get install -y apache2 "libapache2-mod-php${PHP_VERSION}"
+    sudo a2enmod php${PHP_VERSION}
+    sudo systemctl enable apache2
+    sudo systemctl start apache2
+    echo "Apache2 installed and started"
+  fi
+fi
+
+# Install Nginx if specified
+if [ "$WEB_SERVER" = "nginx" ]; then
+  if command -v nginx &>/dev/null; then
+    echo "Nginx is already installed:"
+    nginx -v
+  else
+    echo "Installing Nginx and PHP FPM..."
+    sudo apt-get install -y nginx "php${PHP_VERSION}-fpm"
+    sudo systemctl enable nginx
+    sudo systemctl start nginx
+    sudo systemctl enable "php${PHP_VERSION}-fpm"
+    sudo systemctl start "php${PHP_VERSION}-fpm"
+    echo "Nginx and PHP FPM installed and started"
+  fi
+fi
+
 # Check if Composer should be installed
 if [ "$INSTALL_COMPOSER" = "composer" ]; then
   # Check if Composer is already installed
