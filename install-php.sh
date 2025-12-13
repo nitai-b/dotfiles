@@ -97,18 +97,26 @@ if [ "$INSTALL_COMPOSER" = "composer" ]; then
     echo "Updating Composer to latest version..."
     sudo composer self-update
   else
-    # Install Composer with hash verification
+    # Install Composer with dynamic hash verification
     echo "Installing Composer..."
     cd /tmp
+
+    # Fetch the latest hash from Composer's website
+    EXPECTED_SIGNATURE=$(php -r "copy('https://composer.github.io/installer.sig', 'php://stdout');")
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    php -r "if (hash_file('sha384', 'composer-setup.php') === 'c8b085408188070d5f52bcfe4ecfbee5f727afa458b2573b8eaaf77b3419b0bf2768dc67c86944da1544f06fa544fd47') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }"
+    ACTUAL_SIGNATURE=$(php -r "echo hash_file('sha384', 'composer-setup.php');")
+
+    if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]; then
+      echo "Installer corrupt"
+      rm composer-setup.php
+      exit 1
+    fi
+
+    echo "Installer verified"
     sudo php composer-setup.php
     sudo mv composer.phar /usr/local/bin/composer
-    php -r "unlink('composer-setup.php');"
+    rm composer-setup.php
     cd -
-
-    # Update to latest version
-    sudo composer self-update
 
     # Verify Composer installation
     composer --version
