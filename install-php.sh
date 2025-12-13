@@ -6,6 +6,30 @@ if [ "$#" -ne 1 ]; then
 fi
 
 PHP_VERSION=$1
+WEB_SERVER=${2:-"none"} # optional second argument
+
+# Add Ondrej PPAs if not already present
+if ! grep -q "ondrej/php" /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null; then
+  echo "Adding Ondrej PHP PPA..."
+  sudo add-apt-repository ppa:ondrej/php -y
+fi
+
+if [ "$WEB_SERVER" = "apache2" ] && ! grep -q "ondrej/apache2" /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null; then
+  echo "Adding Ondrej Apache2 PPA..."
+  sudo add-apt-repository ppa:ondrej/apache2 -y
+elif [ "$WEB_SERVER" = "nginx" ] && ! grep -q "ondrej/nginx" /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null; then
+  echo "Adding Ondrej Nginx PPA..."
+  sudo add-apt-repository ppa:ondrej/nginx -y
+fi
+
+sudo apt-get update
+
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 <PHP_version>"
+  exit 1
+fi
+
+PHP_VERSION=$1
 
 # Add Ondrej PPA if not already present
 if ! grep -q "ondrej/php" /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null; then
