@@ -71,7 +71,7 @@ multiplier = 3
 
 # Mouse configuration
 [mouse]
-hide_when_typing = true
+hide_when_typing = false
 
 # Optional: Selection configuration
 [selection]
