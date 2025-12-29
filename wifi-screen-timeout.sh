@@ -1,17 +1,20 @@
 #!/bin/bash
 
-# Get your home WiFi SSID
-HOME_WIFI="Digicel_5G_WiFi_4tMB"
+# List of networks where screen timeout should be disabled
+# To add more, separate the strings by spaces in the brackets like:
+# HOME_NETWORKS=("YourHomeWifiName" "SecondNetworkName" "ThirdNetworkName")
+TRUSTED_NETWORKS=("Digicel_5G_WiFi_4tMB")
 
 # Get currently connected WiFi SSID
 CURRENT_WIFI=$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2)
 
-if [ "$CURRENT_WIFI" == "$HOME_WIFI" ]; then
-  # Connected to home WiFi, disable screen timeout
+# Check if current WiFi is in the list
+if [[ " ${TRUSTED_NETWORKS[@]} " =~ " ${CURRENT_WIFI} " ]]; then
+  # Connected to a home network, disable screen timeout
   dconf write /org/gnome/desktop/session/idle-delay "uint32 0"
-  notify-send "Home WiFi detected - Screen timeout disabled"
+  notify-send "Trusted network detected - Screen timeout disabled"
 else
-  # Not on home WiFi, enable screen timeout (5 minutes)
+  # Not on a home network, enable screen timeout
   dconf write /org/gnome/desktop/session/idle-delay "uint32 300"
-  notify-send "Away from home - Screen timeout enabled (5 minutes)"
+  notify-send "Trusted network not detected - Screen timeout enabled (5 minutes)"
 fi
