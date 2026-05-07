@@ -3,7 +3,18 @@
 if [[ $# -eq 1 ]]; then
   selected=$1
 else
-  selected=$(find ~/projects/ ~/projects/npictt/ ~/projects/enquiretech/ ~/projects/ixm/ ~/projects/personal/ ~/projects/buildFromSource/ ~/projects/clients/ ~/Documents/notes/ -mindepth 1 -maxdepth 1 -type d | fzf)
+  paths=(
+    ~/projects/
+    ~/projects/npictt/
+    ~/projects/enquiretech/
+    ~/projects/ixm/
+    ~/projects/ixm/shp-cloud-run-services/
+    ~/projects/personal/
+    ~/projects/buildFromSource/
+    ~/projects/clients/
+  )
+
+  selected=$(find "${paths[@]}" -mindepth 1 -maxdepth 1 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
