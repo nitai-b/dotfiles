@@ -41,7 +41,13 @@ trap 'rm -f "$tmp_list"' EXIT
 
 (
   cd "$repo_root"
+
+  # Include tracked files and untracked files that are not ignored.
   git ls-files --cached --others --exclude-standard -z >"$tmp_list"
+
+  # Include the .git directory itself.
+  # This does not include other ignored files from the working tree.
+  find .git -type f -print0 >>"$tmp_list"
 )
 
 if [[ ! -s "$tmp_list" ]]; then
