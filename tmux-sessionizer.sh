@@ -8,7 +8,6 @@ else
     ~/projects/npictt/
     ~/projects/enquiretech/
     ~/projects/ixm/
-    ~/projects/ixm/shp-cloud-run-services/
     ~/projects/personal/
     ~/projects/buildFromSource/
     ~/projects/clients/
