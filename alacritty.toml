@@ -2,13 +2,14 @@
 [window]
 decorations = "None"  # Removes title bar and borders
 padding = { x = 0, y = 0 }
+startup_mode = "Fullscreen"
 
 # Optional: Set initial window size
 dimensions = { columns = 120, lines = 30 }
 
 [font]
 normal = { family = "JetBrainsMono Nerd FontMono", style = "Regular"}
-size=16
+size=14
 
 # Optional: Window position (uncomment if you want specific positioning)
 # position = { x = 0, y = 0 }
