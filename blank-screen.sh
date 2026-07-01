@@ -1,0 +1,2 @@
+#!/bin/bash
+dbus-send --session --dest=org.gnome.ScreenSaver --type=method_call /org/gnome/ScreenSaver org.gnome.ScreenSaver.SetActive boolean:true
