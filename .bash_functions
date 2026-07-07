@@ -18,12 +18,30 @@ git_review_diff() {
   echo "Wrote diff to $output"
 }
 
-copy-path() {
-  if [[ -z "$1" ]]; then
-    echo "Usage: copy-path <file-or-folder-path>"
+cpath() {
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: cpath <file-or-folder-path> [more paths...]"
+    echo
+    echo "Examples:"
+    echo "  cpath ~/Downloads/file.png"
+    echo "  cpath ~/Downloads/file1.png ~/Downloads/file2.png ~/Pictures/image.jpg"
     return 1
   fi
 
-  readlink -f "$1" | wl-copy
-  echo "Copied: $(readlink -f "$1")"
+  local resolved_paths=()
+  local path resolved
+
+  for path in "$@"; do
+    if ! resolved="$(readlink -f -- "$path")"; then
+      echo "Could not resolve path: $path" >&2
+      return 1
+    fi
+
+    resolved_paths+=("$resolved")
+  done
+
+  printf '%s\n' "${resolved_paths[@]}" | wl-copy
+
+  echo "Copied ${#resolved_paths[@]} path(s):"
+  printf '%s\n' "${resolved_paths[@]}"
 }
