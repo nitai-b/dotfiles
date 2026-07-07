@@ -17,3 +17,13 @@ git_review_diff() {
 
   echo "Wrote diff to $output"
 }
+
+copy-path() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: copy-path <file-or-folder-path>"
+    return 1
+  fi
+
+  readlink -f "$1" | wl-copy
+  echo "Copied: $(readlink -f "$1")"
+}
