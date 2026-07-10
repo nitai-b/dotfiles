@@ -46,7 +46,7 @@ cpath() {
   printf '%s\n' "${resolved_paths[@]}"
 }
 
-pushallrepos() {
+gitpushallrepos() {
   local base="${1:-.}"
   local repo top branch behind ahead
 
