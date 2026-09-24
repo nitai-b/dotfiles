@@ -4,7 +4,7 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: gitzip [repo_path] [output_zip]
+Usage: gitzip [--exclude-git] [repo_path] [output_zip]
 
 Create a zip archive of a git repository while excluding ignored files.
 
@@ -12,15 +12,29 @@ Arguments:
   repo_path    Path to the git repository. Defaults to the current directory.
   output_zip   Output archive path. Defaults to <repo-name>.zip in the
                current working directory.
+
+Options:
+  --exclude-git  Leave the .git directory out of the archive.
 EOF
 }
 
-if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
-  usage
-  exit 0
+exclude_git=false
+arguments=()
+for argument in "$@"; do
+  case "$argument" in
+    -h|--help) usage; exit 0 ;;
+    --exclude-git) exclude_git=true ;;
+    -*) echo "Unknown option: $argument" >&2; usage >&2; exit 1 ;;
+    *) arguments+=("$argument") ;;
+  esac
+done
+
+if (( ${#arguments[@]} > 2 )); then
+  usage >&2
+  exit 1
 fi
 
-repo_path="${1:-.}"
+repo_path="${arguments[0]:-.}"
 
 if ! repo_root="$(git -C "$repo_path" rev-parse --show-toplevel 2>/dev/null)"; then
   echo "Error: not a git repository: $repo_path" >&2
@@ -28,7 +42,7 @@ if ! repo_root="$(git -C "$repo_path" rev-parse --show-toplevel 2>/dev/null)"; t
 fi
 
 repo_name="$(basename "$repo_root")"
-output_zip="${2:-$repo_name.zip}"
+output_zip="${arguments[1]:-$repo_name.zip}"
 
 if [[ "$output_zip" != /* ]]; then
   output_zip="$PWD/$output_zip"
@@ -45,9 +59,10 @@ trap 'rm -f "$tmp_list"' EXIT
   # Include tracked files and untracked files that are not ignored.
   git ls-files --cached --others --exclude-standard -z >"$tmp_list"
 
-  # Include the .git directory itself.
-  # This does not include other ignored files from the working tree.
-  find .git -type f -print0 >>"$tmp_list"
+  if [[ "$exclude_git" == false ]]; then
+    # This does not include other ignored files from the working tree.
+    find .git -type f -print0 >>"$tmp_list"
+  fi
 )
 
 if [[ ! -s "$tmp_list" ]]; then
