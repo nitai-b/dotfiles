@@ -15,9 +15,10 @@ size=14
 # position = { x = 0, y = 0 }
 
 # Shell configuration
+# Start tmux: attach to the most recently used session, or create "main" if none exist
 [terminal.shell]
-program = "/bin/bash"  # Change to "/bin/bash" if using Bash
-args = ["--login"]
+program = "/bin/bash"
+args = ["--login", "-c", "tmux attach-session 2>/dev/null || exec tmux new-session -A -s main"]
 
 # Keyboard bindings (optional custom shortcuts)
 [[keyboard.bindings]]
